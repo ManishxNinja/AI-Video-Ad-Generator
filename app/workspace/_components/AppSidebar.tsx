@@ -53,13 +53,13 @@ const menuOptions = [
 function AppSidebar() {
   const path = usePathname();
   return (
-    <Sidebar>
+    <Sidebar >
       <SidebarHeader className='flex items-center'>
         <Image src={'/logo.svg'} alt='logo' width={100} height={80}/>
       </SidebarHeader>
       <hr/>
       <SidebarContent>
-        <SidebarGroup className='mt-5'>
+        <SidebarGroup className='mt-5'> 
           <Button>+ Create New Ad Video</Button>
         </SidebarGroup>
         <SidebarGroup >

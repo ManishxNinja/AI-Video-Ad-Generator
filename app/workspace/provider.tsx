@@ -50,8 +50,10 @@ function WorkSpaceProvider({ children }: WorkSpaceProviderProps) {
   }
   return <UserDetailsContext.Provider value={{userDetail,setUserDetail}}>
     <SidebarProvider>
-      <AppSidebar />
-      <div>
+      <div className=''>
+        <AppSidebar />
+      </div>
+      <div className='w-full'>
         <SidebarTrigger />
         {children}
       </div>
