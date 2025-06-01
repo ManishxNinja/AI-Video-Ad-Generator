@@ -7,6 +7,7 @@ import { useUser } from '@clerk/nextjs';
 import { useMutation } from 'convex/react';
 import React, { ReactNode, useEffect, useState } from 'react';
 import AppSidebar from './_components/AppSidebar';
+import { Id } from "@/convex/_generated/dataModel"
 
 
 
@@ -15,7 +16,7 @@ type WorkSpaceProviderProps = {
 };
 
 interface UserDetail {
-  _id: string;
+  _id: Id<"users">;
   name: string;
   email: string;
   picture?: string;

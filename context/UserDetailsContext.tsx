@@ -1,7 +1,8 @@
 import { createContext } from "react";
+import { Id } from "@/convex/_generated/dataModel"
 
-type UserDetail = {
-  _id: string;
+export type UserDetail = {
+  _id: Id<'users'>;
   name: string;
   email: string;
   picture?: string;
