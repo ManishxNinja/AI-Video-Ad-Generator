@@ -41,18 +41,36 @@ function VoiceList({videoData,onHandleInputChange} : { videoData: any,onHandleIn
           Select Your Fav. Voice for video ad
         </label>
         <div className='grid grid-cols-4 gap-4 mt-3 h-[250px] overflow-auto'>
-          {voiceList == null? <Loader className='animate-spin' />:voiceList?.slice(0,100).map((voice: any,index: number) => (
-            <div className={`flex items-center gap-2 border rounded-md p-1 cursor-pointer ${voice?.voice_id == videoData?.voice?.voice_id && 'border-primary bg-blue-100 text-primary'}`} key={index} onClick={() => onHandleInputChange('voice',voice)}>
-              <PlayCircleIcon className='text-purple-600' onClick={() => setPlayAudio(voice?.preview_audio)}/>
-              <div>
-                <h2>{voice.name}</h2>
-                <h2 className='text-xs'>
-                  {voice.language}({voice.gender})
-                </h2>
+          {voiceList == null ? (
+  <Loader className="animate-spin" />
+) : (
+  voiceList
+    .filter((voice: any) => voice.language?.toLowerCase() === 'english') // filter English voices
+    .slice(0, 100) // take first 100
+    .map((voice: any, index: number) => (
+          <div
+            key={index}
+            className={`flex items-center gap-2 border rounded-md p-1 cursor-pointer ${
+              voice?.voice_id == videoData?.voice?.voice_id && 'border-primary bg-blue-100 text-primary'
+            }`}
+            onClick={() => onHandleInputChange('voice', voice)}
+          >
+                <PlayCircleIcon
+                  className="text-purple-600"
+                  onClick={(e) => {
+                    e.stopPropagation(); 
+                    setPlayAudio(voice?.preview_audio);
+                  }}
+                />
+                <div>
+                  <h2>{voice.name}</h2>
+                  <h2 className="text-xs">
+                    {voice.language} ({voice.gender})
+                  </h2>
+                </div>
               </div>
-
-            </div>
-          ))}
+            ))
+        )}
         </div>
       </div>
 
