@@ -9,6 +9,12 @@ const nextConfig: NextConfig = {
         port: '', // leave empty unless using a specific port
         pathname: '/**', // match all paths under the domain
       },
+      {
+        protocol: 'https',
+        hostname: 'ik.imagekit.io',
+        port: '', // leave empty unless using a specific port
+        pathname: '/**', // match all paths under the domain
+      },
     ],
   },
 };

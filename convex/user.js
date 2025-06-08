@@ -34,4 +34,5 @@ export const CreateNewUser = mutation({
 
     return userData[0];
   }
-})
+});
+

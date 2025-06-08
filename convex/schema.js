@@ -20,5 +20,6 @@ export default defineSchema({
     voiceUrl: v.optional(v.string()),
     avatarUrl: v.optional(v.string()),
     videoUrl: v.optional(v.any()),
+    status: v.optional(v.number()) // 1: Pending 2. completed 3.rendering 4. ready to download
   }),
 });
