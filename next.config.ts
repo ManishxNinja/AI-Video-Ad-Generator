@@ -6,17 +6,28 @@ const nextConfig: NextConfig = {
       {
         protocol: 'https',
         hostname: 'files2.heygen.ai',
-        port: '', // leave empty unless using a specific port
-        pathname: '/**', // match all paths under the domain
+        port: '',
+        pathname: '/**',
       },
       {
         protocol: 'https',
         hostname: 'ik.imagekit.io',
-        port: '', // leave empty unless using a specific port
-        pathname: '/**', // match all paths under the domain
+        port: '',
+        pathname: '/**',
       },
     ],
   },
+
+  async redirects() {
+    return [
+      {
+        source: '/',
+        destination: '/workspace',
+        permanent: true, // or false if temporary
+      },
+    ];
+  },
+  
 };
 
 export default nextConfig;

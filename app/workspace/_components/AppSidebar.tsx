@@ -15,7 +15,7 @@ import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 import { LayoutDashboard, Settings2Icon, Video, Videotape, WalletCards } from 'lucide-react'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 
 const menuOptions = [
   {
@@ -31,27 +31,20 @@ const menuOptions = [
 
   },
   {
-    title:'My Videos',
-    icon:Videotape,
-    path:'/workspace/my-videos'
-
-  },
-  {
     title:'Billing',
     icon:WalletCards,
     path:'/workspace/billing'
-
-  },
-  {
-    title:'Settings',
-    icon:Settings2Icon,
-    path:'/workspace/settings'
 
   },
 ]
 
 function AppSidebar() {
   const path = usePathname();
+  const router = useRouter();
+
+  const OnClick = () => {
+    router.push('/workspace/create-ad');
+  }
   return (
     <Sidebar >
       <SidebarHeader className='flex items-center'>
@@ -60,7 +53,7 @@ function AppSidebar() {
       <hr/>
       <SidebarContent>
         <SidebarGroup className='mt-5'> 
-          <Button>+ Create New Ad Video</Button>
+          <Button onClick={OnClick}>+ Create New Ad Video</Button>
         </SidebarGroup>
         <SidebarGroup >
           <SidebarGroupLabel className='text-md'>Applications</SidebarGroupLabel>
