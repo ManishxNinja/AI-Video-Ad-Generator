@@ -20,6 +20,7 @@ interface UserDetail {
   name: string;
   email: string;
   picture?: string;
+  credits: number
 }
 
 function WorkSpaceProvider({ children }: WorkSpaceProviderProps) {
@@ -40,7 +41,7 @@ function WorkSpaceProvider({ children }: WorkSpaceProviderProps) {
       const result = await newUserMutation({
         name: user?.fullName!,
         email: user?.primaryEmailAddress?.emailAddress!,
-        picture: user?.imageUrl!
+        picture: user?.imageUrl!,
       });
       console.log(result);
       setUserDetail(result);

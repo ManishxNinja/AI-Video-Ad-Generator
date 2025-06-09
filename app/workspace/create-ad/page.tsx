@@ -11,6 +11,7 @@ import { api } from '@/convex/_generated/api';
 import { UserDetailsContext } from '@/context/UserDetailsContext';
 import { Id } from '@/convex/_generated/dataModel'; // ✅ Import Id type
 import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
 
 function CreateAd() {
   const [userInput, setUserInput] = useState<string | undefined>();
@@ -36,6 +37,11 @@ function CreateAd() {
       return; // ✅ Ensure user is authenticated
     }
     console.log(userDetail._id);
+
+    if(userDetail?.credits < 10) {
+      toast('Please add more credits!');
+      return;
+    }
 
     setLoading(true);
     try {

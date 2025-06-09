@@ -41,19 +41,21 @@ function VideoList() {
 
         <div className='flex gap-7 flex-wrap mt-10 '> 
            {videoList?.map((video:any,index : number) => (
-            <div key={index} className='my-10 relative cursor-pointer'>
-              <div className='absolute bottom-0 p-5 w-full bg-black rounded-b-lg'>
-                <h2 className='text-white font-bold'>{video?.topic}</h2>
-                <h2 className='text-white opacity-55 drop-shadow-md'>{moment(video?._creationTime).fromNow()}</h2>
+            <Link href={`/workspace/view-ads/${video?._id}`} key={index}>
+              <div className='my-10 relative cursor-pointer'>
+                <div className='absolute bottom-0 p-5 w-full bg-black rounded-b-lg'>
+                  <h2 className='text-white font-bold'>{video?.topic}</h2>
+                  <h2 className='text-white opacity-55 drop-shadow-md'>{moment(video?._creationTime).fromNow()}</h2>
+                </div>
+                <Image src={video?.assets[0]} alt={video?.topic}
+                      width={300}
+                      height={500}
+                      className='w-[300px] h-[450px] object-cover rounded-xl'
+                />
+                
+                
               </div>
-              <Image src={video?.assets[0]} alt={video?.topic}
-                    width={300}
-                    height={500}
-                    className='w-[300px] h-[450px] object-cover rounded-xl'
-              />
-              
-              
-            </div>
+            </Link>
     
            ))}
         </div>

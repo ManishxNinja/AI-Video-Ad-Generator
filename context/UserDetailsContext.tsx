@@ -6,6 +6,7 @@ export type UserDetail = {
   name: string;
   email: string;
   picture?: string;
+  credits: number
 };
 
 type UserDetailContextType = {

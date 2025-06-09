@@ -4,7 +4,7 @@ import { api } from '@/convex/_generated/api';
 import { Id } from "@/convex/_generated/dataModel";
 import { useConvex, useMutation } from 'convex/react';
 import { useParams } from 'next/navigation';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 
 import Script from './_components/script';
 import UploadFiles from './_components/UploadFiles';
@@ -16,6 +16,7 @@ import { Loader, Sparkle } from 'lucide-react';
 
 import ImageKit from 'imagekit';
 import axios from 'axios';
+import { UserDetailsContext } from '@/context/UserDetailsContext';
 // import { clearInterval } from 'timers';
 
 function CreateVideo() {
@@ -24,8 +25,17 @@ function CreateVideo() {
   const updatedVideo = useMutation(api.videoData.updateInitialVideo);
 
   const [videoData, setVideoData] = useState<any>(null);
+  const context = useContext(UserDetailsContext);
+
+  if (!context) {
+    throw new Error("UserDetailsContext must be used within a Provider");
+  }
+  const {userDetail, setUserDetail } = context;
+
   const [isGenerateButtonClick, setIsGenerateButtonClick] = useState<boolean>(false);
   const [generatedVideoUrl,setGeneratedVideoUrl] = useState<string | null>(null);
+
+  const UpdateUserCredits = useMutation(api.user.updateUserCredits);
 
   // Fetch video data once on mount (only when video_id changes)
   useEffect(() => {
@@ -131,6 +141,24 @@ function CreateVideo() {
       console.log("Triggered Inngest event:", response.data);
     } catch (error) {
       console.error("Failed to trigger avatar creation:", error);
+    }
+    setUserDetail((prev) =>
+      prev
+        ? {
+            ...prev,
+            credits: Number(userDetail?.credits! - 10),
+          }
+        : null
+    );
+
+    try {
+      const result = await UpdateUserCredits({
+        credits: Number(userDetail?.credits) - 10,
+        uid:userDetail?._id!
+      });
+      console.log("Updated Credits:::",result);
+    } catch(err) {
+      console.log("Erro in updating the credits",err);
     }
 
   };
