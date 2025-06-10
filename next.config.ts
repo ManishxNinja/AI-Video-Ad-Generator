@@ -23,11 +23,11 @@ const nextConfig: NextConfig = {
       {
         source: '/',
         destination: '/workspace',
-        permanent: true, // or false if temporary
+        permanent: true, 
       },
     ];
   },
-  
+
 };
 
 export default nextConfig;

@@ -50,7 +50,13 @@ function CreateAd() {
         topic: userInput,
       });
 
-      const JsonResult = JSON.parse(result.data.content);
+      if(!result.data) {
+        toast(<div className='font-bold text-red-400'>
+          Please Try Again
+        </div>)
+      }
+
+      const JsonResult = JSON.parse(result.data.content); // ⬅️ Ensure it's parsed into array
       console.log("Script Variant from API:", JsonResult);
 
       const resp = await CreateNewVideoData({
@@ -64,7 +70,11 @@ function CreateAd() {
       router.push(`/workspace/create-ad/${resp}`) // ✅ Confirm success
     } catch (err) {
       setLoading(false);
-      console.error("Some error occurred:", err); // ✅ Improve error visibility
+
+      console.error("Some error occurred:", err)
+      toast(<div className='font-bold text-red-400'>
+          Please Try Again
+        </div>); 
     }
 
     

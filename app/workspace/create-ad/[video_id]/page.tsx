@@ -12,17 +12,20 @@ import AvatarList from './_components/AvatarList';
 import VoiceList from './_components/VoiceList';
 
 import { Button } from '@/components/ui/button';
-import { Loader, Sparkle } from 'lucide-react';
+import { Loader, LoaderCircle, Sparkle } from 'lucide-react';
 
 import ImageKit from 'imagekit';
 import axios from 'axios';
 import { UserDetailsContext } from '@/context/UserDetailsContext';
+import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
 // import { clearInterval } from 'timers';
 
 function CreateVideo() {
   const { video_id } = useParams(); // fetch video_id from route
   const convex = useConvex();
   const updatedVideo = useMutation(api.videoData.updateInitialVideo);
+  const router = useRouter();
 
   const [videoData, setVideoData] = useState<any>(null);
   const context = useContext(UserDetailsContext);
@@ -33,7 +36,6 @@ function CreateVideo() {
   const {userDetail, setUserDetail } = context;
 
   const [isGenerateButtonClick, setIsGenerateButtonClick] = useState<boolean>(false);
-  const [generatedVideoUrl,setGeneratedVideoUrl] = useState<string | null>(null);
 
   const UpdateUserCredits = useMutation(api.user.updateUserCredits);
 
@@ -73,14 +75,20 @@ function CreateVideo() {
 
   // Generate video function – uploads files and updates the 'assets' field
   const GenerateVideo = async () => {
+    setIsGenerateButtonClick(true);
     const rawFiles = videoData?.rawFiles;
 
-    if (!rawFiles || rawFiles.length === 0) {
-      console.warn("No files to upload");
+    if (!rawFiles || rawFiles == undefined || rawFiles.length === 0 || !videoData?.script || !videoData?.avatar || !videoData?.voice) {
       
+      toast(<div className='text-red-600'>
+        'Please Fill All The Details or wait for some Seconds and then try again'
+      </div>)
+      console.warn("No files to upload");
+      setIsGenerateButtonClick(false);
+      return;
     }
 
-    if (rawFiles.length > 0) {
+    if (rawFiles != undefined && rawFiles.length > 0) {
       try {
         const uploadPromises = rawFiles.map((file: any) =>
           imageKit.upload({
@@ -108,33 +116,32 @@ function CreateVideo() {
         console.error("Upload failed to the ImageKit Cloud or DB:", err);
       }
     }
-
+    let myVideoId = ''
     
-    // try {
-    //   const result = await axios.post('/api/generate-video',{
-    //     avatar_id: videoData?.avatar.avatar_id,
-    //     script: videoData?.script,
-    //     voice_id: videoData?.voice.voice_id,
-    //   });
+    try {
+      const result = await axios.post('/api/generate-video',{
+        avatar_id: videoData?.avatar.avatar_id,
+        script: videoData?.script,
+        voice_id: videoData?.voice.voice_id,
+      });
 
-    //   console.log(result.data);
+      console.log(result.data);
 
-    //   const myVideoId = result.data;
+      myVideoId = result.data;
       
-    //   console.log("video_id is this::::::::",myVideoId);
+      console.log("video_id is this::::::::",myVideoId);
 
-    // } catch(err) {
-    //   console.log("error in fetching from backend::",err);
-    // }
+    } catch(err) {
+      console.log("error in fetching from backend::",err);
+      return;
+    }
 
-    // setIsGenerateButtonClick(true);
-    // setGeneratedVideoUrl(null);
     
 
     try {
       // 🚀 Call API to trigger avatar generation event
       const response = await axios.post("/api/check-video-status", {
-        video_id: "eb620c8eba034d23a2f20ca6a6dc19da",
+        video_id: myVideoId,
         video_record_id: video_id,
       });
 
@@ -158,37 +165,34 @@ function CreateVideo() {
       });
       console.log("Updated Credits:::",result);
     } catch(err) {
-      console.log("Erro in updating the credits",err);
+      console.log("Error in updating the credits",err);
+    
     }
-
+    setIsGenerateButtonClick(false);
+    
   };
 
-  // Show loading screen while data is being fetched
+ 
   if (!videoData) {
     return <Loader className="animate-spin flex items-center justify-center" />;
   }
 
   return (
-    <div>
-      <h2 className="font-bold text-2xl">Create Video Ad</h2>
-      <div className="grid grid-cols-1 md:grid-cols-3 mt-8">
-        <div className="md:col-span-2">
+    <div className='m-5'>
+      <h2 className="font-bold text-3xl">Create Video Ad</h2>
+      <div className="grid grid-cols-1 mt-2">
+        <div className="">
           {/* Each component receives current videoData and a setter function */}
           <Script videoData={videoData} onHandleInputChange={onHandleInputChange} />
           <UploadFiles videoData={videoData} onHandleInputChange={onHandleInputChange} />
           <AvatarList videoData={videoData} onHandleInputChange={onHandleInputChange} />
           <VoiceList videoData={videoData} onHandleInputChange={onHandleInputChange} />
 
-          <Button onClick={GenerateVideo} className="mt-7 ml-2 mb-3 w-full">
-            <Sparkle className="mr-2" /> Generate
+          <Button onClick={GenerateVideo} className={`mt-7 ml-2 mb-3 w-full${isGenerateButtonClick?'disabled':''}`}>
+            {isGenerateButtonClick?<LoaderCircle className='mr-2 animate-spin' />:<Sparkle className={`mr-2`} />} Generate
           </Button>
         </div>
 
-        {/* Right Column – reserved for Preview */}
-        <div>
-          <h3 className="text-lg font-semibold">Preview</h3>
-          {/* Add preview logic here */}
-        </div>
       </div>
     </div>
   );

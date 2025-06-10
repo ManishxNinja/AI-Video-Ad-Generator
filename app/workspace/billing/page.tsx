@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/card";
 import { UserDetailsContext } from "@/context/UserDetailsContext";
 import { useContext } from "react";
+import { toast } from "sonner";
 
 
 
@@ -26,7 +27,13 @@ export default function BillingPage() {
     throw new Error("User doesn't exist");
   }
   const {userDetail,setUserDetail} = context;
-  const userCredits = userDetail?.credits; // Replace with dynamic value from user context/API
+  const userCredits = userDetail?.credits; 
+
+  const OnClick = () => {
+    toast(<div className="flex font-bold text-lg">
+      Currently In Development Process(Mail me at manishkaushik2243@gmail.com for adding Credits).
+    </div>)
+  }
 
   return (
     <div className="p-6 space-y-8">
@@ -58,7 +65,7 @@ export default function BillingPage() {
               <CardContent className="py-6 flex flex-col items-center justify-between space-y-4">
                 <div className="text-xl font-semibold">{option.credits} Credits</div>
                 <div className="text-muted-foreground">{option.price} $</div>
-                <Button className="w-full">Buy Now</Button>
+                <Button className="w-full" onClick={OnClick}>Buy Now</Button>
               </CardContent>
             </Card>
           ))}

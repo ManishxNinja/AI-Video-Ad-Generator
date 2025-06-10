@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { User } from 'lucide-react'
+import { Loader2Icon, User } from 'lucide-react'
 import Image from 'next/image'
 import React, { useEffect, useState } from 'react'
 
@@ -29,7 +29,7 @@ function AvatarList({ videoData,onHandleInputChange }: { videoData: any,onHandle
       <hr className='my-3' />
       <div>
         <label>Select Your Fav. Avatar for video ad</label>
-        <div className='grid grid-cols-5 gap-4 mt-3 h-[250px] overflow-auto'>
+        {avatarList.length == 0? <div className='w-full flex items-center justify-center'> <Loader2Icon className='animate-spin'/></div>:<div className='grid grid-cols-5 gap-4 mt-3 h-[250px] overflow-auto'>
           {avatarList.slice(0, 100).map((avatar: any, index: number) => (
             <div key={index} className={`border rounded p-2 hover:shadow-lg cursor-pointer ${videoData?.avatar?.avatar_id == avatar?.avatar_id && 'border-primary bg-blue-100'}`} onClick={() => onHandleInputChange('avatar',avatar)}>
               <Image
@@ -42,7 +42,7 @@ function AvatarList({ videoData,onHandleInputChange }: { videoData: any,onHandle
               <h2 className='text-center'>{avatar.avatar_name}</h2>
             </div>
           ))}
-        </div>
+        </div>}
       </div>
     </div>
   )
